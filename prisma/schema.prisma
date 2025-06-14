@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id // Assuming Supabase ID is a string (e.g., UUID)
+  email     String   @unique
+  username  String   @unique
+  password  String?  // Storing the hashed password from Supabase, or just a placeholder if Supabase handles all auth
+  role      UserRole @default(USER)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+enum UserRole {
+  USER
+  ADMIN
+  // Add other roles as needed
+}
+
+model Vaporizer {
+  id             Int            @id @default(autoincrement())
+  name           String
+  manufacturer   String?
+  msrp           Decimal?
+  releaseDate    DateTime?      @map("release_date") @db.Date
+  heatingMethod  HeatingMethod? @map("heating_method")
+  tempControl    TempControl?   @map("temp_control")
+  expertScore    Decimal?       @map("expert_score") @db.Decimal(3, 1)
+  userRating     Decimal?       @map("user_rating") @db.Decimal(2, 1)
+  bestFor        String[]       @map("best_for")
+
+  @@map("vaporizers")
+}
+
+enum HeatingMethod {
+  HYBRID
+  CONVECTION
+  CONDUCTION
+}
+
+enum TempControl {
+  DIGITAL
+  ANALOG
+  APP
+  PRESET
+}
