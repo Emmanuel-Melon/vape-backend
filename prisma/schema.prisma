@@ -22,6 +22,8 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+    quizAttempts UserQuizAttempt[]
+
   @@map("users")
 }
 
@@ -33,6 +35,7 @@ enum UserRole {
 
 model Vaporizer {
   id             Int            @id @default(autoincrement())
+  slug           String         @unique
   name           String
   manufacturer   String?
   msrp           Decimal?
@@ -57,4 +60,116 @@ enum TempControl {
   ANALOG
   APP
   PRESET
+}
+
+// Quiz System Models
+
+model Quiz {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  questions   Question[]
+  attempts    UserQuizAttempt[]
+
+  @@map("quizzes")
+}
+
+enum QuestionType {
+  WELCOME
+  SINGLE_SELECT
+  MULTI_SELECT
+  RANKED_SELECT
+  RANGE_SLIDER
+  // Add more as needed, e.g., TEXT_INPUT
+}
+
+model Question {
+  id        Int      @id @default(autoincrement())
+  quizId    Int
+  quiz      Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  text      String   // Corresponds to "title" in quizSteps
+  subtitle  String?  // Corresponds to "subtitle" or "description" in quizSteps
+  type      QuestionType
+  order     Int      // To maintain question order
+  options   QuestionOption[]
+  answers   UserAnswer[]
+
+  // For RANKED_SELECT
+  maxRank   Int?
+
+  // For RANGE_SLIDER
+  rangeMin     Float?
+  rangeMax     Float?
+  rangeStep    Float?
+  rangeDefault Float?
+  // rangeMarkers Json? // Could be added if needed, for now keeping it simpler
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("questions")
+  @@unique([quizId, order]) // Ensure order is unique per quiz
+}
+
+model QuestionOption {
+  id          Int      @id @default(autoincrement())
+  questionId  Int
+  question    Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  label       String   // Corresponds to "label" in quizSteps options
+  value       String   // Corresponds to "id" in quizSteps options (e.g., 'beginner', 'joints') - should be unique per question
+  description String?  // Corresponds to "description" in quizSteps options (e.g., for heating method)
+  order       Int?     // To maintain option order if necessary
+  userAnswers UserAnswer[] @relation("SingleSelectedOption")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("question_options")
+  @@unique([questionId, value]) // Ensure option value is unique per question
+}
+
+model UserQuizAttempt {
+  id             Int      @id @default(autoincrement())
+  userId         String   // Foreign key to User model
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quizId         Int
+  quiz           Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  startedAt      DateTime @default(now()) @map("started_at")
+  completedAt    DateTime? @map("completed_at")
+  answers        UserAnswer[]
+  rawAnswersJson Json? @map("raw_answers_json") // Store the full submission for easy retrieval/auditing
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("user_quiz_attempts")
+}
+
+model UserAnswer {
+  id                Int      @id @default(autoincrement())
+  userQuizAttemptId Int
+  userQuizAttempt   UserQuizAttempt @relation(fields: [userQuizAttemptId], references: [id], onDelete: Cascade)
+  questionId        Int
+  question          Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  // For SINGLE_SELECT:
+  selectedOptionId  Int?            // Foreign key to QuestionOption
+  selectedOption    QuestionOption? @relation("SingleSelectedOption", fields: [selectedOptionId], references: [id], onDelete:Restrict)
+
+  // For MULTI_SELECT: (Storing array of QuestionOption.value strings)
+  selectedOptionValues String[] @map("selected_option_values")
+
+  // For RANKED_SELECT: (Storing as JSON: [{ optionValue: "flavor", rank: 1 }, ...])
+  rankedAnswersJson Json? @map("ranked_answers_json")
+
+  // For RANGE_SLIDER:
+  rangeValue        Float?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("user_answers")
+  @@unique([userQuizAttemptId, questionId]) // Ensure a user answers a question only once per attempt
 }

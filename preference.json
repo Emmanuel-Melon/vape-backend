@@ -1,0 +1,23 @@
+{
+    "cannabisExperience": "novice",
+    "primaryUse": "medical",
+    "simplicityPreference": null,
+    "discretionImportance": null,
+    "heatingMethod": null,
+    "airflowPreference": null,
+    "temperatureControl": null,
+    "usagePattern": "daily",
+    "userType": null,
+    "portability": "portable",
+    "budget": 200,
+    "priorities": {
+        "vaporPotency": 5,
+        "vaporComfort": 5,
+        "portability": 5,
+        "batteryLife": 5,
+        "buildQuality": 5,
+        "easeOfUse": 5,
+        "maintenance": 5,
+        "value": 5
+    }
+}

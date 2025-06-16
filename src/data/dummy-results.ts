@@ -1,0 +1,234 @@
+export const dummyResultsData = {
+    "primaryRecommendation": {
+        "id": "venty",
+        "name": "Venty",
+        "brand": "Storz & Bickel",
+        "price": 449,
+        "image": "https://images.pexels.com/photos/7148621/pexels-photo-7148621.jpeg?auto=compress&cs=tinysrgb&w=300",
+        "category": "premium",
+        "heatingMethod": "hybrid",
+        "type": "portable",
+        "ratings": {
+            "vaporPotency": 10,
+            "vaporComfort": 9,
+            "portability": 7,
+            "batteryLife": 9,
+            "buildQuality": 10,
+            "easeOfUse": 8,
+            "maintenance": 7,
+            "value": 8
+        },
+        "features": [
+            "Supercharger technology",
+            "Adjustable airflow",
+            "App connectivity",
+            "Fast heat-up"
+        ],
+        "pros": [
+            "Exceptional vapor quality",
+            "Innovative cooling system",
+            "Excellent build quality",
+            "Great battery life"
+        ],
+        "cons": [
+            "Premium price point",
+            "Larger size",
+            "Learning curve for optimization"
+        ],
+        "bestFor": [
+            "Heavy users",
+            "Vapor quality enthusiasts",
+            "Tech-savvy users"
+        ],
+        "notIdealFor": [
+            "Budget-conscious users",
+            "Ultra-portable needs"
+        ],
+        "warranty": "3 years",
+        "maintenanceLevel": "medium",
+        "learningCurve": "moderate",
+        "beginnerFriendly": false,
+        "advancedFeatures": true,
+        "sessionVape": true,
+        "score": null,
+        "matchScore": null
+    },
+    "alternatives": [
+        {
+            "id": "mighty-plus",
+            "name": "Mighty+",
+            "brand": "Storz & Bickel",
+            "price": 399,
+            "image": "https://images.pexels.com/photos/7148621/pexels-photo-7148621.jpeg?auto=compress&cs=tinysrgb&w=300",
+            "category": "premium",
+            "heatingMethod": "hybrid",
+            "type": "portable",
+            "ratings": {
+                "vaporPotency": 9,
+                "vaporComfort": 9,
+                "portability": 6,
+                "batteryLife": 8,
+                "buildQuality": 10,
+                "easeOfUse": 9,
+                "maintenance": 7,
+                "value": 8
+            },
+            "features": [
+                "Proven design",
+                "Excellent cooling unit",
+                "Precise temperature control",
+                "Medical grade"
+            ],
+            "pros": [
+                "Legendary reliability",
+                "Smooth vapor",
+                "Easy to use",
+                "Consistent performance"
+            ],
+            "cons": [
+                "Bulky design",
+                "Expensive",
+                "Plastic construction"
+            ],
+            "bestFor": [
+                "Medical users",
+                "Reliability seekers",
+                "Smooth vapor preference"
+            ],
+            "notIdealFor": [
+                "Stealth users",
+                "Budget buyers"
+            ],
+            "warranty": "3 years",
+            "maintenanceLevel": "medium",
+            "learningCurve": "easy",
+            "beginnerFriendly": true,
+            "advancedFeatures": true,
+            "sessionVape": true,
+            "score": null,
+            "matchScore": null
+        },
+        {
+            "id": "potv-lobo",
+            "name": "Lobo",
+            "brand": "Planet of the Vapes",
+            "price": 159,
+            "image": "https://images.pexels.com/photos/7148621/pexels-photo-7148621.jpeg?auto=compress&cs=tinysrgb&w=300",
+            "category": "mid-range",
+            "heatingMethod": "convection",
+            "type": "portable",
+            "ratings": {
+                "vaporPotency": 8,
+                "vaporComfort": 8,
+                "portability": 8,
+                "batteryLife": 7,
+                "buildQuality": 8,
+                "easeOfUse": 8,
+                "maintenance": 8,
+                "value": 9
+            },
+            "features": [
+                "Pure convection",
+                "Removable battery",
+                "Glass vapor path",
+                "Compact design"
+            ],
+            "pros": [
+                "Great value",
+                "Pure flavor",
+                "User-replaceable battery",
+                "Good portability"
+            ],
+            "cons": [
+                "Smaller bowl size",
+                "Learning curve for optimal use"
+            ],
+            "bestFor": [
+                "Flavor chasers",
+                "Value seekers",
+                "Moderate users"
+            ],
+            "notIdealFor": [
+                "Heavy users",
+                "Beginners wanting simplicity"
+            ],
+            "warranty": "3 years",
+            "maintenanceLevel": "low",
+            "learningCurve": "moderate",
+            "beginnerFriendly": false,
+            "advancedFeatures": true,
+            "sessionVape": false,
+            "score": null,
+            "matchScore": null
+        },
+        {
+            "id": "tinymight2",
+            "name": "TinyMight 2",
+            "brand": "TinyMight",
+            "price": 349,
+            "image": "https://images.pexels.com/photos/7148621/pexels-photo-7148621.jpeg?auto=compress&cs=tinysrgb&w=300",
+            "category": "mid-range",
+            "heatingMethod": "convection",
+            "type": "portable",
+            "ratings": {
+                "vaporPotency": 10,
+                "vaporComfort": 7,
+                "portability": 8,
+                "batteryLife": 7,
+                "buildQuality": 8,
+                "easeOfUse": 6,
+                "maintenance": 6,
+                "value": 8
+            },
+            "features": [
+                "On-demand heating",
+                "Powerful extraction",
+                "Artisan crafted",
+                "Temperature dial"
+            ],
+            "pros": [
+                "Incredible potency",
+                "Fast extraction",
+                "Beautiful wood design",
+                "On-demand capability"
+            ],
+            "cons": [
+                "Learning curve",
+                "Fragile",
+                "Limited warranty support"
+            ],
+            "bestFor": [
+                "Power users",
+                "On-demand preference",
+                "Experienced users"
+            ],
+            "notIdealFor": [
+                "Beginners",
+                "Clumsy users",
+                "Warranty-conscious buyers"
+            ],
+            "warranty": "1 year",
+            "maintenanceLevel": "medium",
+            "learningCurve": "steep",
+            "beginnerFriendly": false,
+            "advancedFeatures": true,
+            "sessionVape": false,
+            "score": null,
+            "matchScore": null
+        }
+    ],
+    "explanation": "The Venty is a great choice because it excels in vapor potency.",
+    "educationalContent": {
+        "temperatureGuide": [
+            "350-375°F (177-190°C): Best for flavor, mild effects.",
+            "375-400°F (190-204°C): Balanced flavor and vapor, moderate effects.",
+            "400-430°F (204-221°C): Maximum vapor, stronger effects, less flavor."
+        ],
+        "maintenanceTips": [
+            "Regular cleaning (every 5-10 uses) preserves flavor and performance.",
+            "Use isopropyl alcohol and cotton swabs for most parts.",
+            "Check manufacturer instructions for specific cleaning advice."
+        ]
+    },
+    "matchScore": null
+};

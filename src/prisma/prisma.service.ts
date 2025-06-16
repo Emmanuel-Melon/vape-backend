@@ -3,10 +3,16 @@ import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 
 @Injectable()
-export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
+export class PrismaService
+  extends PrismaClient
+  implements OnModuleInit, OnModuleDestroy
+{
   constructor() {
     super({
-      log: process.env.NODE_ENV === 'development' ? ['query', 'info', 'warn', 'error'] : ['error'],
+      log:
+        process.env.NODE_ENV === 'development'
+          ? ['query', 'info', 'warn', 'error']
+          : ['error'],
     });
   }
 
@@ -22,9 +28,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
   async cleanDatabase() {
     if (process.env.NODE_ENV !== 'production') {
       // The transaction ensures we delete in the correct order regarding foreign keys
-      return this.$transaction([
-        this.user.deleteMany(),
-      ]);
+      return this.$transaction([this.user.deleteMany()]);
     }
   }
 
@@ -35,16 +39,18 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
     } catch (error) {
       // Log the error
       console.error('Prisma error:', error);
-      
+
       // You can add custom error handling logic here
       if (error.code === 'P2002') {
-        throw new Error('A unique constraint would be violated on this operation.');
+        throw new Error(
+          'A unique constraint would be violated on this operation.',
+        );
       }
-      
+
       if (error.code === 'P2025') {
         throw new Error('Record not found.');
       }
-      
+
       // Re-throw the error
       throw error;
     }
