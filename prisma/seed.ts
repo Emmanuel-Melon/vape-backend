@@ -15,8 +15,10 @@ async function main() {
       name: 'Venty',
       manufacturer: 'Storz & Bickel',
       msrp: 449,
-      heatingMethod: HeatingMethod.HYBRID, // Assuming 'hybrid' maps to HYBRID
-      // tempControl: null, // result.json doesn't specify tempControl for Venty directly, need to decide default or map
+      heatingMethod: HeatingMethod.HYBRID,
+      tempControl: TempControl.DIGITAL,
+      expertScore: 9.5,
+      userRating: 4.8,
       bestFor: ['Heavy users', 'Vapor quality enthusiasts', 'Tech-savvy users'],
     },
     {
@@ -24,7 +26,9 @@ async function main() {
       manufacturer: 'Storz & Bickel',
       msrp: 399,
       heatingMethod: HeatingMethod.HYBRID,
-      // tempControl: null, // Similarly, decide for Mighty+
+      tempControl: TempControl.DIGITAL,
+      expertScore: 9.2,
+      userRating: 4.7,
       bestFor: ['Medical users', 'Reliability seekers', 'Smooth vapor preference'],
     },
     {
@@ -32,7 +36,9 @@ async function main() {
       manufacturer: 'Planet of the Vapes',
       msrp: 159,
       heatingMethod: HeatingMethod.CONVECTION,
-      // tempControl: null, // Similarly, decide for Lobo
+      tempControl: TempControl.DIGITAL,
+      expertScore: 8.5,
+      userRating: 4.5,
       bestFor: ['Flavor chasers', 'Value seekers', 'Moderate users'],
     },
     {
@@ -40,7 +46,9 @@ async function main() {
       manufacturer: 'TinyMight',
       msrp: 349,
       heatingMethod: HeatingMethod.CONVECTION,
-      // tempControl: null, // Similarly, decide for TinyMight 2
+      tempControl: TempControl.DIGITAL,
+      expertScore: 9.0,
+      userRating: 4.6,
       bestFor: ['Power users', 'On-demand preference', 'Experienced users'],
     },
     // Add more vaporizers from result.json's alternatives if needed
@@ -48,10 +56,25 @@ async function main() {
 
   for (const vape of vaporizerData) {
     const slug = generateSlug(vape.name);
+    // Prisma expects Decimal fields (msrp, expertScore, userRating) to be numbers or string representations of numbers.
+    // The current data uses numbers, which is fine.
+    // Ensure all data types match the schema (e.g., heatingMethod and tempControl are enums).
+    const dataToUpsert = {
+      name: vape.name,
+      manufacturer: vape.manufacturer,
+      msrp: vape.msrp,
+      heatingMethod: vape.heatingMethod,
+      tempControl: vape.tempControl,
+      expertScore: vape.expertScore,
+      userRating: vape.userRating,
+      bestFor: vape.bestFor,
+      slug: slug,
+    };
+
     const createdVaporizer = await prisma.vaporizer.upsert({
       where: { slug },
-      update: { ...vape, slug }, // Ensure slug is included in update if record exists
-      create: { ...vape, slug },
+      update: dataToUpsert,
+      create: dataToUpsert,
     });
     console.log(`Created/updated vaporizer with id: ${createdVaporizer.id} and slug: ${createdVaporizer.slug}`);
   }
