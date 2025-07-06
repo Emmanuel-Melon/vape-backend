@@ -8,13 +8,19 @@ import {
   HttpCode,
   HttpStatus,
   UsePipes,
+  UseGuards, // Added
+  Req,       // Added
 } from '@nestjs/common';
+import { Request } from 'express'; // Added
+import { JwtAuthGuard } from '../auth/jwt-auth.guard'; // Added
+import { User } from '../users/entities/user.entity'; // Added for req.user typing
 import {
   QuizService,
   CreateQuizInput,
   CreateQuizSchema, // Added for Zod pipe
-  SubmitQuizAttemptInput,
-  SubmitQuizAttemptSchema, // Added for Zod pipe
+  SubmitQuizAttemptInput,     // Type for service method
+  SubmitQuizAttemptBodySchema, // Schema for request body validation (no userId)
+  // SubmitQuizAttemptSchema,  // Original schema (with userId) - no longer directly used by controller pipe
   UserPreferencesPayloadInput, // Added for recommendations endpoint
   UserPreferencesPayloadSchema, // Added for Zod pipe
   QuizSubmissionResponse, // Use the new response type
@@ -24,6 +30,7 @@ import { dummyResultsData } from '../data/dummy-results';
 import { ZodValidationPipe } from '../pipes/zod-validation.pipe'; // Enabled Zod pipe
 
 @Controller('api/quizzes')
+@UseGuards(JwtAuthGuard) // Apply guard to the entire controller
 export class QuizController {
   constructor(private readonly quizService: QuizService) {}
 
@@ -48,11 +55,15 @@ export class QuizController {
 
   @Post('attempts')
   @HttpCode(HttpStatus.CREATED)
-  @UsePipes(new ZodValidationPipe(SubmitQuizAttemptSchema))
+  @UsePipes(new ZodValidationPipe(SubmitQuizAttemptBodySchema)) // Changed to use BodySchema
   async submitAttempt(
-    @Body() submitAttemptDto: SubmitQuizAttemptInput,
+    @Req() req: Request,
+    @Body() submitAttemptDto: Omit<SubmitQuizAttemptInput, 'userId'>, // userId will come from req.user
   ): Promise<QuizSubmissionResponse> {
-    return this.quizService.submitAttempt(submitAttemptDto);
+    const user = req.user as User;
+    // We'll need to adjust quizService.submitAttempt to accept userId as a parameter
+    // and the DTO to not expect userId from the body.
+    return this.quizService.submitAttempt({ ...submitAttemptDto, userId: user.id });
   }
 
   @Post('recommendations')
@@ -70,18 +81,18 @@ export class QuizController {
     return dummyResultsData;
   }
 
-  @Get('attempts/user/:userId')
-  async getUserAttempts(
-    @Param('userId') userId: string,
-  ): Promise<UserQuizAttempt[]> {
-    return this.quizService.getUserAttempts(userId);
+  @Get('attempts/me') // Changed route
+  async getMyAttempts(@Req() req: Request): Promise<UserQuizAttempt[]> {
+    const user = req.user as User;
+    return this.quizService.getUserAttempts(user.id);
   }
 
-  @Get('attempts/user/:userId/quiz/:quizId')
-  async getUserAttemptsForQuiz(
-    @Param('userId') userId: string,
+  @Get('attempts/me/quiz/:quizId') // Changed route
+  async getMyAttemptsForQuiz(
+    @Req() req: Request,
     @Param('quizId', ParseIntPipe) quizId: number,
   ): Promise<UserQuizAttempt[]> {
-    return this.quizService.getUserAttempts(userId, quizId);
+    const user = req.user as User;
+    return this.quizService.getUserAttempts(user.id, quizId);
   }
 }

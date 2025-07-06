@@ -9,18 +9,32 @@ import {
   HttpCode,
   HttpStatus,
   ParseIntPipe,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { memoryStorage } from 'multer';
 import {
   VaporizerService,
   CreateVaporizerInput,
   UpdateVaporizerInput,
+  RecommendByVibeDto,
 } from './vaporizer.service';
 import { Vaporizer } from '@prisma/client';
-// import { ZodValidationPipe } from '../pipes/zod-validation.pipe'; // Assuming a Zod pipe might be created
+import { uploadVaporizerImage } from './operations/upload';
+import { ZodValidationPipe } from '../pipes/zod-validation.pipe';
+import { AnnotationService } from './annotation.service';
+import {
+  CreateAnnotationDto,
+  createAnnotationSchema,
+} from './dto/create-annotation.dto';
 
 @Controller('api/vaporizers')
 export class VaporizerController {
-  constructor(private readonly vaporizerService: VaporizerService) {}
+  constructor(
+    private readonly vaporizerService: VaporizerService,
+    private readonly annotationService: AnnotationService,
+  ) {}
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
@@ -60,13 +74,32 @@ export class VaporizerController {
     await this.vaporizerService.remove(id);
   }
 
-  // Endpoint for recommendations as per requirements.md (POST /api/recommendations)
-  // This might live in its own controller (e.g., recommendations.controller.ts) eventually
-  // For now, placing a simplified version here, assuming it uses VaporizerService.
-  @Post('/recommendations') // Note: Route might be POST /api/recommendations, adjust controller prefix or method route
+  @Post('recommend-by-vibe')
   @HttpCode(HttpStatus.OK)
-  async getRecommendations(@Body() quizResponses: any): Promise<any[]> {
-    // In a real app, quizResponses would also be validated using a Zod schema
-    return this.vaporizerService.getRecommendations(quizResponses);
+  async recommendByVibe(@Body() data: RecommendByVibeDto) {
+    // In a real app, this DTO would be validated using a Zod pipe
+    return this.vaporizerService.recommendByVibe(data);
+  }
+
+  @Post(':id/image')
+  @UseInterceptors(FileInterceptor('file', { storage: memoryStorage() }))
+  async uploadImage(
+    @Param('id', ParseIntPipe) id: number,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    if (!file) {
+      throw new Error('No file uploaded');
+    }
+    return uploadVaporizerImage(file, { vaporizerId: id });
+  }
+
+  @Post(':id/annotations')
+  @HttpCode(HttpStatus.CREATED)
+  async createAnnotation(
+    @Param('id', ParseIntPipe) id: number,
+    @Body(new ZodValidationPipe(createAnnotationSchema))
+    createAnnotationDto: CreateAnnotationDto,
+  ) {
+    return this.annotationService.create(id, createAnnotationDto);
   }
 }

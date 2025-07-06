@@ -81,6 +81,7 @@ export const SubmitQuizAnswerSchema = z.object({
   rangeValue: z.number().optional(), // for RANGE_SLIDER
 });
 
+// Schema for the data structure the service method expects (including userId)
 export const SubmitQuizAttemptSchema = z.object({
   quizId: z.number().int(),
   userId: z.string(), // Assuming user ID is a string (e.g., from Supabase)
@@ -89,6 +90,10 @@ export const SubmitQuizAttemptSchema = z.object({
     .min(1, 'At least one answer must be submitted'),
 });
 export type SubmitQuizAttemptInput = z.infer<typeof SubmitQuizAttemptSchema>;
+
+// New schema for validating the request BODY (userId is not expected from client)
+export const SubmitQuizAttemptBodySchema = SubmitQuizAttemptSchema.omit({ userId: true });
+export type SubmitQuizAttemptBodyInput = z.infer<typeof SubmitQuizAttemptBodySchema>;
 
 // Define the structure of the recommendation data based on result.json
 // This is a simplified version; ideally, generate this from result.json's structure or a Zod schema

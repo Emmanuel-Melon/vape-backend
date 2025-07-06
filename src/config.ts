@@ -12,6 +12,5 @@ export const nextPublicSupabaseAnonKey =
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 export const serviceRoleKey = process.env.SERVICE_ROLE_KEY;
 export const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
-export const googleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY;
-export const googlePlacesRegion = process.env.GOOGLE_PLACES_REGION;
 export const jwtSecret = process.env.JWT_SECRET;
+export const geminiApiKey = process.env.GEMINI_API_KEY;

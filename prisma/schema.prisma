@@ -20,6 +20,16 @@ model User {
   @@map("users")
 }
 
+enum SessionType {
+  SOLO
+  GROUP
+}
+
+enum HeatingStyle {
+  ON_DEMAND
+  SESSION
+}
+
 model Vaporizer {
   id            Int            @id @default(autoincrement())
   name          String
@@ -32,6 +42,17 @@ model Vaporizer {
   userRating    Decimal?       @map("user_rating") @db.Decimal(2, 1)
   bestFor       String[]       @map("best_for")
   slug          String         @unique
+
+  // Vibe and preference scores
+  moods             String[]   @default([])
+  contexts          String[]   @default([])
+  scenarios         String[]   @default([])
+  portabilityScore  Decimal?   @map("portability_score") @db.Decimal(3, 1)
+  easeOfUseScore    Decimal?   @map("ease_of_use_score") @db.Decimal(3, 1)
+  discreetnessScore Decimal?   @map("discreetness_score") @db.Decimal(3, 1)
+
+  // Relation to Annotations
+  annotations Annotation[]
 
   @@map("vaporizers")
 }
@@ -144,4 +165,23 @@ enum QuestionType {
   MULTI_SELECT
   RANKED_SELECT
   RANGE_SLIDER
+}
+
+enum AnnotationType {
+  PRO
+  CON
+  TIP
+  NOTE
+}
+
+model Annotation {
+  id          Int            @id @default(autoincrement())
+  vaporizerId Int
+  type        AnnotationType
+  text        String
+  createdAt   DateTime       @default(now()) @map("created_at")
+  updatedAt   DateTime       @updatedAt @map("updated_at")
+  vaporizer   Vaporizer      @relation(fields: [vaporizerId], references: [id], onDelete: Cascade)
+
+  @@map("annotations")
 }
