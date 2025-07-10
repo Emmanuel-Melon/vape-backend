@@ -1,10 +1,19 @@
-import { PrismaClient, Vaporizer } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 import { GeminiClient } from '../lib/llm/gemini';
 import { Message } from '../lib/llm/types';
 
 // --- Types ---
+// Helper type representing a vaporizer with related vocabulary rows included.
+export type VaporizerWithVocabs = Prisma.VaporizerGetPayload<{
+  include: {
+    bestFor:   { select: { bestFor: { select: { name: true } } } };
+    moods:     { select: { mood:     { select: { name: true } } } };
+    contexts:  { select: { context:  { select: { name: true } } } };
+    scenarios: { select: { scenario: { select: { name: true } } } };
+  };
+}>;
 export interface ScoredVaporizer {
-  vaporizer: Vaporizer;
+  vaporizer: VaporizerWithVocabs;
   score: number;
   breakdown: {
     totalScore: number;
@@ -31,7 +40,14 @@ class VaporizerRecommenderService {
    * @returns A list of the top N scored vaporizers with reasoning.
    */
   async recommend(query: string, topN = 5): Promise<ScoredVaporizer[]> {
-    const vaporizers = await this.prisma.vaporizer.findMany();
+    const vaporizers = await this.prisma.vaporizer.findMany({
+      include: {
+        bestFor:   { select: { bestFor: { select: { name: true } } } },
+        moods:     { select: { mood:     { select: { name: true } } } },
+        contexts:  { select: { context:  { select: { name: true } } } },
+        scenarios: { select: { scenario: { select: { name: true } } } },
+      },
+    });
 
     const vaporizerDataString = vaporizers
       .map((v) => JSON.stringify(this.serializeVaporizerForLLM(v)))
@@ -78,7 +94,8 @@ class VaporizerRecommenderService {
     }
   }
 
-  private serializeVaporizerForLLM(vaporizer: Vaporizer): any {
+
+private serializeVaporizerForLLM(vaporizer: VaporizerWithVocabs): any {
     return {
       id: vaporizer.id,
       name: vaporizer.name,
@@ -88,10 +105,10 @@ class VaporizerRecommenderService {
       tempControl: vaporizer.tempControl,
       expertScore: Number(vaporizer.expertScore),
       userRating: Number(vaporizer.userRating),
-      bestFor: vaporizer.bestFor,
-      moods: vaporizer.moods,
-      contexts: vaporizer.contexts,
-      scenarios: vaporizer.scenarios,
+      bestFor: vaporizer.bestFor.map((b) => b.bestFor.name),
+      moods: vaporizer.moods.map((m) => m.mood.name),
+      contexts: vaporizer.contexts.map((c) => c.context.name),
+      scenarios: vaporizer.scenarios.map((s) => s.scenario.name),
       portabilityScore: Number(vaporizer.portabilityScore),
       easeOfUseScore: Number(vaporizer.easeOfUseScore),
       discreetnessScore: Number(vaporizer.discreetnessScore),
