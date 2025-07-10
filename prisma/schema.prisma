@@ -34,25 +34,52 @@ model Vaporizer {
   id            Int            @id @default(autoincrement())
   name          String
   manufacturer  String?
-  msrp          Decimal?
+  msrp          Decimal?       @db.Decimal(10, 2)
   releaseDate   DateTime?      @map("release_date") @db.Date
   heatingMethod HeatingMethod? @map("heating_method")
   tempControl   TempControl?   @map("temp_control")
   expertScore   Decimal?       @map("expert_score") @db.Decimal(3, 1)
   userRating    Decimal?       @map("user_rating") @db.Decimal(2, 1)
-  bestFor       String[]       @map("best_for")
   slug          String         @unique
+  category      String?
+  subCategory   String?        @map("sub_category")
+  powerSource   String?        @map("power_source")
+  bowlSizeGrams String?        @map("bowl_size_grams")
+  heatUpTimeSeconds String?    @map("heat_up_time_seconds")
+  
+  // Summary fields
+  vaporQualitySummary  String? @map("vapor_quality_summary") @db.Text
+  efficiencySummary    String? @map("efficiency_summary") @db.Text
+  easeOfUseSummary     String? @map("ease_of_use_summary") @db.Text
+  maintenanceSummary   String? @map("maintenance_summary") @db.Text
+  communityFeedback    String? @map("community_feedback") @db.Text
+  enthusiastRating     Int?
+  
+  // Price information
+  regularPrice  Decimal? @map("regular_price") @db.Decimal(10, 2)
+  salePrice     Decimal? @map("sale_price") @db.Decimal(10, 2)
+  currentPrice  Decimal? @map("current_price") @db.Decimal(10, 2)
 
   // Vibe and preference scores
-  moods             String[]   @default([])
-  contexts          String[]   @default([])
-  scenarios         String[]   @default([])
   portabilityScore  Decimal?   @map("portability_score") @db.Decimal(3, 1)
   easeOfUseScore    Decimal?   @map("ease_of_use_score") @db.Decimal(3, 1)
   discreetnessScore Decimal?   @map("discreetness_score") @db.Decimal(3, 1)
 
+  // Relations to controlled vocabularies
+  moods           MoodToVaporizer[]
+  contexts        ContextToVaporizer[]
+  scenarios       ScenarioToVaporizer[]
+  bestFor         BestForToVaporizer[]
+  deliveryMethods DeliveryMethodToVaporizer[]
+  tags            TagToVaporizer[]
+  
+  // Relations to other models
+  accessories     Accessory[]
+  comparisons     Comparison[]
+  ballVapeDetails BallVapeDetails?
+  
   // Relation to Annotations
-  annotations Annotation[]
+  annotations     Annotation[]
 
   @@map("vaporizers")
 }
@@ -172,6 +199,7 @@ enum AnnotationType {
   CON
   TIP
   NOTE
+  FEATURE
 }
 
 model Annotation {
@@ -184,4 +212,185 @@ model Annotation {
   vaporizer   Vaporizer      @relation(fields: [vaporizerId], references: [id], onDelete: Cascade)
 
   @@map("annotations")
+}
+
+// Controlled vocabulary models
+model Mood {
+  id          Int               @id @default(autoincrement())
+  name        String            @unique
+  description String?
+  createdAt   DateTime          @default(now()) @map("created_at")
+  updatedAt   DateTime          @updatedAt @map("updated_at")
+  vaporizers  MoodToVaporizer[]
+
+  @@map("moods")
+}
+
+model Context {
+  id          Int                 @id @default(autoincrement())
+  name        String              @unique
+  description String?
+  createdAt   DateTime            @default(now()) @map("created_at")
+  updatedAt   DateTime            @updatedAt @map("updated_at")
+  vaporizers  ContextToVaporizer[]
+
+  @@map("contexts")
+}
+
+model Scenario {
+  id          Int                  @id @default(autoincrement())
+  name        String               @unique
+  description String?
+  createdAt   DateTime             @default(now()) @map("created_at")
+  updatedAt   DateTime             @updatedAt @map("updated_at")
+  vaporizers  ScenarioToVaporizer[]
+
+  @@map("scenarios")
+}
+
+model BestFor {
+  id          Int                 @id @default(autoincrement())
+  name        String              @unique
+  description String?
+  createdAt   DateTime            @default(now()) @map("created_at")
+  updatedAt   DateTime            @updatedAt @map("updated_at")
+  vaporizers  BestForToVaporizer[]
+
+  @@map("best_for_tags")
+}
+
+// Delivery methods model
+model DeliveryMethod {
+  id          Int                       @id @default(autoincrement())
+  name        String                    @unique
+  description String?
+  createdAt   DateTime                  @default(now()) @map("created_at")
+  updatedAt   DateTime                  @updatedAt @map("updated_at")
+  vaporizers  DeliveryMethodToVaporizer[]
+
+  @@map("delivery_methods")
+}
+
+// Accessory models
+model Accessory {
+  id          Int                @id @default(autoincrement())
+  name        String
+  isOfficial  Boolean            @default(true) @map("is_official")
+  vaporizerId Int
+  createdAt   DateTime           @default(now()) @map("created_at")
+  updatedAt   DateTime           @updatedAt @map("updated_at")
+  vaporizer   Vaporizer          @relation(fields: [vaporizerId], references: [id], onDelete: Cascade)
+
+  @@map("accessories")
+}
+
+// Comparison model
+model Comparison {
+  id             Int       @id @default(autoincrement())
+  vaporizerId    Int
+  comparedToName String    @map("compared_to_name")
+  summary        String    @db.Text
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+  vaporizer      Vaporizer @relation(fields: [vaporizerId], references: [id], onDelete: Cascade)
+
+  @@map("comparisons")
+}
+
+// Ball vape details model
+model BallVapeDetails {
+  id                Int       @id @default(autoincrement())
+  vaporizerId       Int       @unique
+  ballMaterial      String?   @map("ball_material")
+  ballSizeMm        Float?    @map("ball_size_mm")
+  ballCount         Int?
+  coilSizeMm        Float?    @map("coil_size_mm")
+  recommendedTempF  Float?    @map("recommended_temp_f")
+  createdAt         DateTime  @default(now()) @map("created_at")
+  updatedAt         DateTime  @updatedAt @map("updated_at")
+  vaporizer         Vaporizer @relation(fields: [vaporizerId], references: [id], onDelete: Cascade)
+
+  @@map("ball_vape_details")
+}
+
+// Junction tables for many-to-many relationships
+model MoodToVaporizer {
+  moodId      Int
+  vaporizerId Int
+  mood        Mood      @relation(fields: [moodId], references: [id], onDelete: Cascade)
+  vaporizer   Vaporizer @relation(fields: [vaporizerId], references: [id], onDelete: Cascade)
+
+  @@id([moodId, vaporizerId])
+  @@map("mood_to_vaporizer")
+}
+
+model ContextToVaporizer {
+  contextId   Int
+  vaporizerId Int
+  context     Context   @relation(fields: [contextId], references: [id], onDelete: Cascade)
+  vaporizer   Vaporizer @relation(fields: [vaporizerId], references: [id], onDelete: Cascade)
+
+  @@id([contextId, vaporizerId])
+  @@map("context_to_vaporizer")
+}
+
+model ScenarioToVaporizer {
+  scenarioId  Int
+  vaporizerId Int
+  scenario    Scenario  @relation(fields: [scenarioId], references: [id], onDelete: Cascade)
+  vaporizer   Vaporizer @relation(fields: [vaporizerId], references: [id], onDelete: Cascade)
+
+  @@id([scenarioId, vaporizerId])
+  @@map("scenario_to_vaporizer")
+}
+
+model BestForToVaporizer {
+  bestForId   Int
+  vaporizerId Int
+  bestFor     BestFor   @relation(fields: [bestForId], references: [id], onDelete: Cascade)
+  vaporizer   Vaporizer @relation(fields: [vaporizerId], references: [id], onDelete: Cascade)
+
+  @@id([bestForId, vaporizerId])
+  @@map("best_for_to_vaporizer")
+}
+
+model DeliveryMethodToVaporizer {
+  deliveryMethodId Int
+  vaporizerId      Int
+  deliveryMethod   DeliveryMethod @relation(fields: [deliveryMethodId], references: [id], onDelete: Cascade)
+  vaporizer        Vaporizer      @relation(fields: [vaporizerId], references: [id], onDelete: Cascade)
+
+  @@id([deliveryMethodId, vaporizerId])
+  @@map("delivery_method_to_vaporizer")
+}
+
+// Tag models for additional categorization
+model Tag {
+  id          Int           @id @default(autoincrement())
+  name        String        @unique
+  category    TagCategory
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+  vaporizers  TagToVaporizer[]
+
+  @@map("tags")
+}
+
+model TagToVaporizer {
+  tagId       Int
+  vaporizerId Int
+  tag         Tag       @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  vaporizer   Vaporizer @relation(fields: [vaporizerId], references: [id], onDelete: Cascade)
+
+  @@id([tagId, vaporizerId])
+  @@map("tag_to_vaporizer")
+}
+
+enum TagCategory {
+  HEATING
+  POWER
+  DELIVERY
+  FEATURES
+  MATERIALS
+  TYPE
 }
