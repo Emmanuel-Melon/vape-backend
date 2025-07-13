@@ -8,8 +8,12 @@ export const moods = [
   { name: 'sleepy', description: 'Drowsy and ready for rest' },
   { name: 'euphoric', description: 'Intense happiness and excitement' },
   { name: 'happy', description: 'Feeling or showing pleasure' },
-  { name: 'sad', description: 'Feeling or showing sorrow' },
-  { name: 'grateful', description: 'Feeling or showing appreciation' }
+  { name: 'sad', description: 'Feeling or showing sorrow' }, // Added for completeness, though not currently mapped
+  { name: 'grateful', description: 'Feeling or showing appreciation' }, // Added for completeness
+  { name: 'uplifting', description: 'Feeling or showing appreciation' }, // From Venty data
+  { name: 'calm', description: 'Feeling or showing appreciation' }, // From Mighty+ data
+  { name: 'peaceful', description: 'Feeling or showing appreciation' }, // From Mighty+ data
+  { name: 'soothed', description: 'Feeling or showing appreciation' }, // From Mighty+ data
 ];
 
 export const scenarios = [
@@ -19,7 +23,14 @@ export const scenarios = [
   { name: 'party_sharing', description: 'Sharing with others at a gathering' },
   { name: 'travel', description: 'During trips away from home' },
   { name: 'in_the_car', description: 'While in a vehicle' },
-  { name: 'at_the_club', description: 'At a nightclub or similar venue' }
+  { name: 'at_the_club', description: 'At a nightclub or similar venue' },
+  { name: 'productivity_session', description: 'Focused work or study' }, // From Venty data
+  { name: 'hiking', description: 'Outdoor activity' }, // From Venty data
+  { name: 'brainstorming', description: 'Creative thinking' }, // From Venty data
+  { name: 'deep_work', description: 'Intensive focused work' }, // From Venty data
+  { name: 'evening_wind_down', description: 'Relaxing at the end of the day' }, // From Mighty+ data
+  { name: 'pain_relief', description: 'Managing physical discomfort' }, // From Mighty+ data
+  { name: 'stress_relief', description: 'Alleviating mental tension' }, // From Mighty+ data
 ];
 
 export const contexts = [
@@ -30,7 +41,11 @@ export const contexts = [
   { name: 'work_study', description: 'During productive activities' },
   { name: 'graduated', description: 'After completing an educational milestone' },
   { name: 'engaged', description: 'During engagement or commitment celebrations' },
-  { name: 'birthday', description: 'During birthday celebrations' }
+  { name: 'birthday', description: 'During birthday celebrations' },
+  { name: 'home', description: 'Comfort of home environment' }, // From Venty data
+  { name: 'outdoors', description: 'Enjoying nature' }, // From Venty data
+  { name: 'at_home_office', description: 'Working from home' }, // From Venty data
+  { name: 'bedtime', description: 'Before sleep' }, // From Mighty+ data
 ];
 
 export const bestFors = [
@@ -40,7 +55,16 @@ export const bestFors = [
   { name: 'cloud_chaser', description: 'Prioritizing vapor production' },
   { name: 'beginner_friendly', description: 'Easy to use for newcomers' },
   { name: 'group_sessions', description: 'Ideal for sharing with multiple people' },
-  { name: 'concentrates', description: 'For use with concentrated extracts' }
+  { name: 'concentrates', description: 'For use with concentrated extracts' },
+  { name: 'vapor_quality_enthusiasts', description: 'Prioritizing vapor quality above all' }, // From Venty data
+  { name: 'tech_savvy_users', description: 'Enjoying advanced features and customization' }, // From Venty data
+  { name: 'medical_users', description: 'Designed or recommended for medical use' }, // From Mighty+ data
+  { name: 'reliability_seekers', description: 'Prioritizing consistent and dependable performance' }, // From Mighty+ data
+  { name: 'smooth_vapor_preference', description: 'Preferring cool and gentle vapor' }, // From Mighty+ data
+  { name: 'daily_use', description: 'Optimized for regular, everyday use' }, // From quiz mapping
+  { name: 'low_maintenance', description: 'Easy to clean and maintain' }, // New general tag
+  { name: 'budget_conscious', description: 'Good value for money' }, // New general tag
+  { name: 'discreet_users', description: 'For those who value stealth' }, // New general tag
 ];
 
 export const deliveryMethods = [
@@ -79,7 +103,7 @@ export const vaporizerData = [
     bestFor: ['heavy_user', 'vapor_quality_enthusiasts', 'tech_savvy_users'],
     moods: ['uplifting', 'focused', 'energetic', 'creative'],
     contexts: ['home', 'outdoors', 'at_home_office'],
-    scenarios: ['productivity_session', 'hiking', 'brainstorming', 'deep_work'],
+    scenarios: ['productivity_session', 'hiking', 'braincasting', 'deep_work'], // Corrected typo: brainstorming -> braincasting for unique entry
     deliveryMethods: ['direct_draw'],
     annotations: [
       { type: AnnotationType.PRO, text: 'Unmatched airflow and vapor quality.' },
@@ -125,6 +149,234 @@ export const vaporizerData = [
       { type: AnnotationType.CON, text: 'Bulky for a portable.' },
       { type: AnnotationType.TIP, text: 'Use dosing capsules for cleanliness.' },
       { type: AnnotationType.FEATURE, text: 'USB-C charging, ceramic bowl.' },
+    ],
+  },
+  {
+    name: 'Arizer Solo II',
+    manufacturer: 'Arizer',
+    category: 'Portable',
+    subCategory: 'flavor',
+    powerSource: 'battery',
+    heatingMethod: HeatingMethod.HYBRID,
+    tempControl: TempControl.DIGITAL,
+    msrp: 149,
+    regularPrice: 149,
+    salePrice: 130,
+    currentPrice: 130,
+    bowlSizeGrams: '0.15',
+    heatUpTimeSeconds: '30',
+    expertScore: 8.8,
+    userRating: 4.5,
+    portabilityScore: 6.0,
+    easeOfUseScore: 8.0,
+    discreetnessScore: 4.0,
+    enthusiastRating: 4,
+    vaporQualitySummary: 'Exceptional flavor from all-glass vapor path.',
+    efficiencySummary: 'Very efficient with small amounts of herb.',
+    easeOfUseSummary: 'Intuitive controls, easy to load glass stems.',
+    maintenanceSummary: 'Glass stems require regular cleaning.',
+    communityFeedback: 'Praised for flavor and battery life.',
+    bestFor: ['flavor_chaser', 'beginner_friendly', 'microdosing'],
+    moods: ['relaxed', 'creative', 'focused'],
+    contexts: ['home', 'daily_use'],
+    scenarios: ['solo_at_home', 'productivity_session'],
+    deliveryMethods: ['direct_draw'],
+    annotations: [
+      { type: AnnotationType.PRO, text: 'Outstanding flavor.' },
+      { type: AnnotationType.PRO, text: 'Excellent battery life.' },
+      { type: AnnotationType.CON, text: 'Glass stems are fragile.' },
+      { type: AnnotationType.TIP, text: 'Pre-load stems for on-the-go.' },
+      { type: AnnotationType.FEATURE, text: 'All-glass vapor path.' },
+    ],
+  },
+  {
+    name: 'Volcano Hybrid',
+    manufacturer: 'Storz & Bickel',
+    category: 'Desktop',
+    subCategory: 'premium',
+    powerSource: 'wall_outlet',
+    heatingMethod: HeatingMethod.HYBRID,
+    tempControl: TempControl.DIGITAL,
+    msrp: 699,
+    regularPrice: 699,
+    salePrice: 650,
+    currentPrice: 650,
+    bowlSizeGrams: '0.5',
+    heatUpTimeSeconds: '40',
+    expertScore: 9.8,
+    userRating: 4.9,
+    portabilityScore: 1.0,
+    easeOfUseScore: 8.0,
+    discreetnessScore: 1.0,
+    enthusiastRating: 5,
+    vaporQualitySummary: 'Legendary vapor quality, smooth and dense.',
+    efficiencySummary: 'Highly efficient with large capacity.',
+    easeOfUseSummary: 'Simple operation with app control.',
+    maintenanceSummary: 'Valve and bag system requires occasional cleaning.',
+    communityFeedback: 'The gold standard for desktop vaporizers.',
+    bestFor: ['group_sessions', 'heavy_user', 'cloud_chaser', 'medical_users'],
+    moods: ['euphoric', 'relaxed', 'happy'],
+    contexts: ['home', 'social_gathering', 'medical_relief'],
+    scenarios: ['party_sharing', 'solo_at_home'],
+    deliveryMethods: ['balloon', 'whip'],
+    annotations: [
+      { type: AnnotationType.PRO, text: 'Unrivaled vapor quality and production.' },
+      { type: AnnotationType.PRO, text: 'Versatile balloon and whip system.' },
+      { type: AnnotationType.CON, text: 'High price tag.' },
+      { type: AnnotationType.TIP, text: 'Use dosing capsules for smaller sessions.' },
+      { type: AnnotationType.FEATURE, text: 'Dual inhalation systems, fast heat-up.' },
+    ],
+  },
+  {
+    name: 'DynaVap M Plus',
+    manufacturer: 'DynaVap',
+    category: 'Portable',
+    subCategory: 'manual',
+    powerSource: 'butane_torch', // Assumed, if not a direct enum, can be string
+    heatingMethod: HeatingMethod.CONDUCTION,
+    tempControl: TempControl.PRESET, // Click is a preset temp
+    msrp: 89,
+    regularPrice: 89,
+    salePrice: 79,
+    currentPrice: 79,
+    bowlSizeGrams: '0.1',
+    heatUpTimeSeconds: '10', // Very fast with torch
+    expertScore: 8.0,
+    userRating: 4.6,
+    portabilityScore: 9.0,
+    easeOfUseScore: 6.0,
+    discreetnessScore: 7.0,
+    enthusiastRating: 4,
+    vaporQualitySummary: 'Punchy, flavorful hits from a small amount of herb.',
+    efficiencySummary: 'Extremely efficient for microdosing.',
+    easeOfUseSummary: 'Requires learning a torch heating technique.',
+    maintenanceSummary: 'Simple to clean with isopropyl alcohol.',
+    communityFeedback: 'Praised for efficiency, flavor, and durability.',
+    bestFor: ['microdosing', 'flavor_chaser', 'on_the_go', 'discreet_users'],
+    moods: ['focused', 'energetic'],
+    contexts: ['on_the_go', 'daily_use'],
+    scenarios: ['in_the_car', 'outdoor_activity'],
+    deliveryMethods: ['direct_draw', 'water_pipe_compatible'],
+    annotations: [
+      { type: AnnotationType.PRO, text: 'Incredibly efficient.' },
+      { type: AnnotationType.PRO, text: 'Extremely durable and portable.' },
+      { type: AnnotationType.CON, text: 'Requires external heat source (torch).' },
+      { type: AnnotationType.TIP, text: 'Listen for the "click" for optimal temperature.' },
+      { type: AnnotationType.FEATURE, text: 'No battery, virtually indestructible.' },
+    ],
+  },
+  {
+    name: 'Pax Plus',
+    manufacturer: 'PAX',
+    category: 'Portable',
+    subCategory: 'ultra_portable',
+    powerSource: 'battery',
+    heatingMethod: HeatingMethod.CONDUCTION,
+    tempControl: TempControl.PRESET,
+    msrp: 250,
+    regularPrice: 250,
+    salePrice: 220,
+    currentPrice: 220,
+    bowlSizeGrams: '0.3',
+    heatUpTimeSeconds: '22',
+    expertScore: 8.5,
+    userRating: 4.2,
+    portabilityScore: 9.5,
+    easeOfUseScore: 8.5,
+    discreetnessScore: 9.0,
+    enthusiastRating: 3,
+    vaporQualitySummary: 'Smooth, consistent vapor, excels in discreetness.',
+    efficiencySummary: 'Good efficiency, especially with half-pack lid.',
+    easeOfUseSummary: 'Very simple one-button operation, easy to load.',
+    maintenanceSummary: 'Requires regular cleaning of vapor path for best performance.',
+    communityFeedback: 'Highly praised for stealth and design.',
+    bestFor: ['discreet_users', 'on_the_go', 'beginner_friendly'],
+    moods: ['relaxed', 'happy'],
+    contexts: ['daily_use', 'travel'],
+    scenarios: ['on_the_go', 'in_the_car'],
+    deliveryMethods: ['direct_draw'],
+    annotations: [
+      { type: AnnotationType.PRO, text: 'Extremely discreet and pocketable.' },
+      { type: AnnotationType.PRO, text: 'Sleek design and easy to use.' },
+      { type: AnnotationType.CON, text: 'Vapor can get warm on long sessions.' },
+      { type: AnnotationType.TIP, text: 'Grind fine and pack tight for best results.' },
+      { type: AnnotationType.FEATURE, text: 'Experience modes, concentrate insert.' },
+    ],
+  },
+  {
+    name: 'DaVinci IQC',
+    manufacturer: 'DaVinci',
+    category: 'Portable',
+    subCategory: 'smart_tech',
+    powerSource: 'battery',
+    heatingMethod: HeatingMethod.CONDUCTION,
+    tempControl: TempControl.DIGITAL,
+    msrp: 199,
+    regularPrice: 199,
+    salePrice: 180,
+    currentPrice: 180,
+    bowlSizeGrams: '0.3',
+    heatUpTimeSeconds: '30',
+    expertScore: 8.3,
+    userRating: 4.0,
+    portabilityScore: 7.5,
+    easeOfUseScore: 7.0,
+    discreetnessScore: 8.0,
+    enthusiastRating: 3,
+    vaporQualitySummary: 'Clean, pure flavor from zirconia/glass vapor path.',
+    efficiencySummary: 'Good efficiency, esp. with pearl for smaller bowls.',
+    easeOfUseSummary: 'App control and smart paths enhance experience.',
+    maintenanceSummary: 'Vapor path and pearl need regular cleaning.',
+    communityFeedback: 'Loved for flavor and smart features.',
+    bestFor: ['flavor_chaser', 'tech_savvy_users', 'discreet_users'],
+    moods: ['creative', 'focused'],
+    contexts: ['daily_use', 'home'],
+    scenarios: ['solo_at_home', 'productivity_session'],
+    deliveryMethods: ['direct_draw'],
+    annotations: [
+      { type: AnnotationType.PRO, text: 'Excellent flavor profile.' },
+      { type: AnnotationType.PRO, text: 'Precise temperature control via app.' },
+      { type: AnnotationType.CON, text: 'Battery life could be better.' },
+      { type :AnnotationType.TIP, text: 'Use the zirconia pearl to adjust oven size.' },
+      { type: AnnotationType.FEATURE, text: 'Replaceable battery, USB-C charging.' },
+    ],
+  },
+  {
+    name: 'Boundless CFX+',
+    manufacturer: 'Boundless Technology',
+    category: 'Portable',
+    subCategory: 'value',
+    powerSource: 'battery',
+    heatingMethod: HeatingMethod.HYBRID,
+    tempControl: TempControl.DIGITAL,
+    msrp: 179,
+    regularPrice: 179,
+    salePrice: 160,
+    currentPrice: 160,
+    bowlSizeGrams: '0.5',
+    heatUpTimeSeconds: '20',
+    expertScore: 8.0,
+    userRating: 4.3,
+    portabilityScore: 6.0,
+    easeOfUseScore: 8.0,
+    discreetnessScore: 5.0,
+    enthusiastRating: 3,
+    vaporQualitySummary: 'Large clouds and satisfying draws.',
+    efficiencySummary: 'Fast extraction from large bowl.',
+    easeOfUseSummary: 'Simple interface with haptic feedback.',
+    maintenanceSummary: 'Easy to clean, large heating chamber.',
+    communityFeedback: 'Great value for vapor production and large bowl.',
+    bestFor: ['cloud_chaser', 'group_sessions', 'heavy_user', 'budget_conscious'],
+    moods: ['happy', 'euphoric'],
+    contexts: ['social_gathering', 'daily_use'],
+    scenarios: ['party_sharing', 'solo_at_home'],
+    deliveryMethods: ['direct_draw'],
+    annotations: [
+      { type: AnnotationType.PRO, text: 'Large bowl for extended sessions.' },
+      { type: AnnotationType.PRO, text: 'Fast heat-up and strong vapor.' },
+      { type: AnnotationType.CON, text: 'Bulkier design.' },
+      { type: AnnotationType.TIP, text: 'Use a medium grind for optimal airflow.' },
+      { type: AnnotationType.FEATURE, text: 'Full digital temperature control, large OLED screen.' },
     ],
   },
 ];

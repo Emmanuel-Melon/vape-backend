@@ -8,7 +8,7 @@ import { QuizAnswerMappingResult } from './types';
  */
 
 // Create a sample quiz with questions based on our mapping
-const sampleQuiz = {
+export const sampleQuiz = {
   id: 1,
   title: "Vaporizer Recommendation Quiz",
   description: "Find your perfect vaporizer match",
@@ -130,8 +130,8 @@ const sampleQuiz = {
   ]
 };
 
-// Sample user answers to the quiz (matches the example in final.md)
-const sampleAnswers = [
+// Sample answers to the quiz
+export const sampleAnswers = [
   { questionId: 1, answer: "Relaxed" },
   { questionId: 2, answer: "At home" },
   { questionId: 3, answer: "Some experience" },

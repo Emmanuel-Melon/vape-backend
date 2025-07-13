@@ -83,7 +83,7 @@ export class QuizMapper {
       // Map the answer to the corresponding context and scenario
       switch (answer.toLowerCase()) {
         case 'at home':
-          preferences.contexts = ['daily_use'];
+          preferences.contexts = ['home'];
           // Lower portability importance for home use
           preferences.portabilityImportance = 3; // Low importance (1-10 scale)
           break;
