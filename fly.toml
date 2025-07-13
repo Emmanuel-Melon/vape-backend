@@ -14,9 +14,9 @@ primary_region = 'jnb'
 [http_service]
   internal_port = 3000
   force_https = true
-  auto_stop_machines = 'stop'
+  auto_stop_machines = false # Change this to false
   auto_start_machines = true
-  min_machines_running = 0
+  min_machines_running = 1   # Change this to 1 (or more)
   processes = ['app']
 
 [[vm]]
