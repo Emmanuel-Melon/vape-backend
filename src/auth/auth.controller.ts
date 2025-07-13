@@ -43,7 +43,7 @@ export class AuthController {
     res.cookie('jwt', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV !== 'development', // Use secure cookies in production
-      sameSite: 'lax', // Or 'strict'
+      sameSite: 'none', // Or 'strict'
       maxAge: 1000 * 60 * 60 * 24, // 1 day
     });
     return { message: 'Logged in successfully' };
