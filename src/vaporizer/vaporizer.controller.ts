@@ -20,6 +20,8 @@ import {
   UpdateVaporizerInput,
   RecommendByVibeDto,
 } from './vaporizer.service';
+import { QuizRecommendationService } from './quiz-recommendation.service';
+import { RecommendByQuizDto, recommendByQuizSchema } from './dto/recommend-by-quiz.dto';
 import { Vaporizer } from '@prisma/client';
 import { uploadVaporizerImage } from './operations/upload';
 import { ZodValidationPipe } from '../pipes/zod-validation.pipe';
@@ -34,6 +36,7 @@ export class VaporizerController {
   constructor(
     private readonly vaporizerService: VaporizerService,
     private readonly annotationService: AnnotationService,
+    private readonly quizRecommendationService: QuizRecommendationService,
   ) {}
 
   @Post()
@@ -79,6 +82,12 @@ export class VaporizerController {
   async recommendByVibe(@Body() data: RecommendByVibeDto) {
     // In a real app, this DTO would be validated using a Zod pipe
     return this.vaporizerService.recommendByVibe(data);
+  }
+
+  @Post('recommend-by-quiz')
+  @HttpCode(HttpStatus.OK)
+  async recommendByQuiz(@Body(new ZodValidationPipe(recommendByQuizSchema)) data: RecommendByQuizDto) {
+    return this.quizRecommendationService.recommendByQuiz(data);
   }
 
   @Post(':id/image')
